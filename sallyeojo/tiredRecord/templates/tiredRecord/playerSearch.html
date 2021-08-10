@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>살려조 계산기 - 선수검색</title>
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/playerSearch_pc.css?ver=4">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/playerSearch_mobile.css?ver=1">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/popup.css?ver=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, 
+  maximum-scale=1.5, minimum-scale=1.0">
+        {%if not DEBUG%}
+        <meta name="description" content="{{description}}">
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5FY3SFVQ9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Z5FY3SFVQ9');
+        </script>
+        {%endif%}
+    </head>
+    <body>
+        <div id="help"><a href="#">?</a></div>
+        <header>
+            <div id="logo">
+                살려조 계산기
+            </div>
+            <nav>
+                <table>
+                <tr>
+                    <td>
+                        <a href="../../teams/2021">구단랭킹</a>
+                    </td>
+                    <td>
+                        <a href="../../">시즌랭킹</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input id="searchInput" type="text" placeholder="선수명 검색">
+                        <button id="search">검색</button>
+                    </td>
+                </tr>
+                </table>
+            </nav>
+        </header>
+        <section id="playerSearchResultSection">
+            <div id="title">
+                검색결과
+            </div>
+            <div id="resultDiv">
+                <div id="resultHeader">
+                    <table>
+                        <tr>
+                            <td width="50%">이름</td>
+                            <td width="50%">소속팀</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="resultData">
+                    <table>
+                        {% for player in playerSearchResults %}
+                            <tr>
+                                <td width="50%"><a href="../../player/{{player.id}}">{{player.name}}</a></td>
+                                <td width="50%"><a href="../../team/{{player.team}}">{{player.team_name}}</a></td>
+                            </tr>
+                        {%endfor%}
+                    </table>
+                </div>
+            </div>
+        </section>
+        <footer>
+            {{ copyright | safe }}
+        </footer>
+        <div id="popUpDiv" style="display:none;">
+            <div id="popUpBackground">
+            </div>
+            <div id="popUp">
+                <div id="title">
+                    <div id="exit"><a href="#">X</a></div>
+                </div>
+                <div id="content">
+                    <h2>살려조 계산기란?</h2><br>
+                    <p>{{helpContent}}</p>
+                    <br><br>
+                    <h2>공지사항</h2><br>
+                    <p>{{notice}}</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            $("#seasonSelect").val("{{season}}").prop("selected", true);
+
+            $("#pitcherTypeSelect").change(() => {
+                var name = $("#pitcherTypeSelect").val();
+                $(".playersRankData").hide();
+                $("#" + name).show();
+            });
+            $("#seasonSelect").change(() => {
+                var season = $("#seasonSelect").val();
+                location.href = "../../season/" + season;
+            });
+
+        </script>
+        <script src="/static/tiredRecord/inputEnter.js"></script>
+        <script src="/static/tiredRecord/viewportSet.js"></script>
+        <script src="/static/tiredRecord/popUpWork.js"></script>
+    </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>살려조 계산기 - {{season}}구단별</title>
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/main_pc.css?ver=5">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/main_mobile.css?ver=5">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/teamsRecord_mobile.css?ver=1">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/popup.css?ver=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, 
+  maximum-scale=1.5, minimum-scale=1.0">
+        {%if not DEBUG%}
+        <meta name="description" content="{{description}}">
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5FY3SFVQ9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Z5FY3SFVQ9');
+        </script>
+        {%endif%}
+    </head>
+    <body>
+        <div id="help"><a href="#">?</a></div>
+        <header>
+            <div id="logo">
+                살려조 계산기
+            </div>
+            <nav>
+                <table>
+                <tr>
+                    <td>
+                        <a href="../../teams/2021">구단랭킹</a>
+                    </td>
+                    <td>
+                        <a href="../../">시즌랭킹</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input id="searchInput" type="text" placeholder="선수명 검색">
+                        <button id="search">검색</button>
+                    </td>
+                </tr>
+                </table>
+            </nav>
+        </header>
+        <section id="playersRankSection">
+            <div id="title">
+                <div id="titleElem">
+                    <select id="seasonSelect">
+                        {% for season in availableSeasons %}
+                        <option value="{{season.season}}">{{season.season}}</option>
+                        {%endfor%}
+                    </select>
+                    시즌 팀 살려조 순위 
+                    <div id="updateDate">
+                    {{updateDate}} 기준
+                    </div>
+                </div>
+            </div>
+            <div id="playersRank">
+                <div id="playersRankHeader">
+                    <table>
+                        <tr>
+                            <td width="15%">순위</td>
+                            <td width="20%">팀명</td>
+                            <td width="40%">살려조지수 총합</td>
+                            <td width="25%">출장투수</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="playersRankData">
+                    <table>
+                        {% for team in teamsRecord %}
+                        <tr>
+                            <td width="15%">{{team.rank}}</td>
+                            <td width="20%"><a href="../../team/{{team.season_team}}/{{season}}">{{team.season_team_name}}</a></td>
+                            <td width="40%">{{team.tired_score__sum}}</td>
+                            <td width="25%">{{team.id__count}}</td>
+                        </tr>
+                        {%endfor%}
+                    </table>
+                </div>
+            </div>
+        </section>
+        <footer>
+            {{ copyright | safe }}
+        </footer>
+        <div id="popUpDiv" style="display:none;">
+            <div id="popUpBackground">
+            </div>
+            <div id="popUp">
+                <div id="title">
+                    <div id="exit"><a href="#">X</a></div>
+                </div>
+                <div id="content">
+                    <h2>살려조 계산기란?</h2><br>
+                    <p>{{helpContent}}</p>
+                    <br><br>
+                    <h2>공지사항</h2><br>
+                    <p>{{notice}}</p>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            $("#seasonSelect").val("{{season}}").prop("selected", true);
+
+            $("#seasonSelect").change(() => {
+                var season = $("#seasonSelect").val();
+                location.href = "../../teams/" + season;
+            });
+
+        </script>
+        <script src="/static/tiredRecord/inputEnter.js"></script>
+        <script src="/static/tiredRecord/viewportSet.js"></script>
+        <script src="/static/tiredRecord/popUpWork.js"></script>
+    </body>
+</html>

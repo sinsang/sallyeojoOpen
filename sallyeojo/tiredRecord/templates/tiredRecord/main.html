@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>살려조 계산기</title>
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/main_pc.css?ver=5">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/main_mobile.css?ver=4">
+        <link rel="stylesheet" type="text/css" href="/static/tiredRecord/popup.css?ver=3">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, 
+  maximum-scale=1.5, minimum-scale=1.0">
+        {%if not DEBUG%}
+        <meta name="description" content="{{description}}">
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z5FY3SFVQ9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Z5FY3SFVQ9');
+        </script>
+        {%endif%}
+    </head>
+    <body>
+        <div id="help"><a href="#">?</a></div>
+        <header>
+            <div id="logo">
+                살려조 계산기
+            </div>
+            <nav>
+                <table>
+                <tr>
+                    <td>
+                        <a href="../../teams/2021">구단랭킹</a>
+                    </td>
+                    <td>
+                        <a href="../../">시즌랭킹</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input id="searchInput" type="text" placeholder="선수명 검색">
+                        <button id="search">검색</button>
+                    </td>
+                </tr>
+                </table>
+            </nav>
+        </header>
+        <section id="playersRankSection">
+            <div id="title">
+                <div id="titleElem">
+                    <select id="seasonSelect">
+                        {% for season in availableSeasons %}
+                        <option value="{{season.season}}">{{season.season}}</option>
+                        {%endfor%}
+                    </select>
+                    시즌 살려조 순위 
+                    <select id="pitcherTypeSelect">
+                        <option value="all">전체보기</option>
+                        <option value="BP">불펜투수</option>
+                        <option value="SP">선발투수</option>
+                    </select>
+                    <div id="updateDate">
+                    {{updateDate}} 기준
+                    </div>
+                </div>
+            </div>
+            <div id="playersRank">
+                <div id="playersRankHeader">
+                    <table>
+                        <tr>
+                            <td width="8%">순위</td>
+                            <td width="5%"></td>
+                            <td width="17%">선수명</td>
+                            <td width="10%">소속팀</td>
+                            <td width="20%">살려조지수</td>
+                            <td width="10%">출장</td>
+                            <td width="10%">선발등판</td>
+                            <td width="10%">이닝</td>
+                            <td width="10%">보직</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="playersRankData" id="all" style="display: block;">
+                    <table>
+                        {% for player in players %}
+                        <tr>
+                            <td width="8%">
+                                {{player.total_rank}}
+                            </td>
+                            <td width="5%">
+                                {% if 0 < player.diff_total_rank %}
+                                    <div class="diffRank">{{player.diff_total_rank}}<div class="arrow-up"></div></div>
+                                {%endif%}
+                                {% if 0 == player.diff_total_rank %} 
+                                <div class="diffRank">{{player.diff_total_rank}}<div class="arrow-flat"></div></div>
+                                {%endif%}
+                                {% if 0 > player.diff_total_rank %}
+                                <div class="diffRank">{{player.diff_total_rank|stringformat:"+d"|slice:"1:"}}<div class="arrow-down"></div></div>
+                                {%endif%}
+                            </td>
+                            <td width="17%"><a href="../../player/{{player.player.id}}">{{player.player.name}}</a></td>
+                            <td width="10%"><a href="../../team/{{player.season_team}}/{{season}}">{{player.season_team_name}}</a></td>
+                            <td width="20%">{{player.tired_score}}</td>
+                            <td width="10%">{{player.g}}</td>
+                            <td width="10%">{{player.startg}}</td>
+                            <td width="10%">{{player.ip}}</td>
+                            <td width="10%">{{player.pitcher_type}}</td>
+                        </tr>
+                        {%endfor%}
+                    </table>
+                </div>
+                <div class="playersRankData" id="BP" style="display: none;">
+                    <table>
+                        {% for player in players %}
+                            {% if player.pitcher_type == "불펜" %}
+                            <tr>
+                                <td width="10%">{{player.pos_rank}} ({{player.total_rank}})</td>
+                                <td width="17%"><a href="../../player/{{player.player.id}}">{{player.player.name}}</a></td>
+                                <td width="10%"><a href="../../team/{{player.season_team}}/{{season}}">{{player.season_team_name}}</a></td>
+                                <td width="20%">{{player.tired_score}}</td>
+                                <td width="10%">{{player.g}}</td>
+                                <td width="10%">{{player.startg}}</td>
+                                <td width="10%">{{player.ip}}</td>
+                                <td width="10%">{{player.pitcher_type}}</td>
+                            </tr>
+                            {%endif%}
+                        {%endfor%}
+                    </table>
+                </div>
+                <div class="playersRankData" id="SP" style="display: none;">
+                    <table>
+                        {% for player in players %}
+                            {% if player.pitcher_type == "선발" %}
+                            <tr>
+                                <td width="10%">{{player.pos_rank}} ({{player.total_rank}})</td>
+                                <td width="17%"><a href="../../player/{{player.player.id}}">{{player.player.name}}</a></td>
+                                <td width="10%"><a href="../../team/{{player.season_team}}/{{season}}">{{player.season_team_name}}</a></td>
+                                <td width="20%">{{player.tired_score}}</td>
+                                <td width="10%">{{player.g}}</td>
+                                <td width="10%">{{player.startg}}</td>
+                                <td width="10%">{{player.ip}}</td>
+                                <td width="10%">{{player.pitcher_type}}</td>
+                            </tr>
+                            {%endif%}
+                        {%endfor%}
+                    </table>
+                </div>
+            </div>
+        </section>
+        <footer>
+            {{ copyright | safe }}
+        </footer>
+        <div id="popUpDiv" style="display:none;">
+            <div id="popUpBackground">
+            </div>
+            <div id="popUp">
+                <div id="title">
+                    <div id="exit"><a href="#">X</a></div>
+                </div>
+                <div id="content">
+                    <h2>살려조 계산기란?</h2><br>
+                    <p>{{helpContent}}</p>
+                    <br><br>
+                    <h2>공지사항</h2><br>
+                    <p>{{notice}}</p>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            $("#seasonSelect").val("{{season}}").prop("selected", true);
+
+            $("#pitcherTypeSelect").change(() => {
+                var name = $("#pitcherTypeSelect").val();
+                $(".playersRankData").hide();
+                $("#" + name).show();
+            });
+            $("#seasonSelect").change(() => {
+                var season = $("#seasonSelect").val();
+                location.href = "../../season/" + season;
+            });
+        </script>
+        <script src="/static/tiredRecord/inputEnter.js"></script>
+        <script src="/static/tiredRecord/viewportSet.js"></script>
+        <script src="/static/tiredRecord/popUpWork.js"></script>
+    </body>
+</html>

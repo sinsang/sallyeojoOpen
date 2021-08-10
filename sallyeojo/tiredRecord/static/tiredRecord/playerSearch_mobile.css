@@ -1,0 +1,121 @@
+/*=========== Mobile STYLE ===========*/
+@media all and (max-width: 1023px) {
+
+    body {
+        overflow-x: auto;
+        overscroll-behavior: initial;
+    }
+    
+    header {
+        width: 100vw;
+        height: 20vh;
+
+        overflow: hidden;
+
+        text-align: center;
+    }
+    
+    header #logo {
+        margin-top: 20px;
+        font-family: "GongGothicBold";
+        font-size: 50px;
+    
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    header nav table {
+        width: 50vw;
+
+        text-decoration: solid;
+        
+        margin-left: 25vw;
+    }
+
+    header nav table td input {
+        width: 70%;
+    }
+
+    #playerSearchResultSection {
+        width: 100vw;
+        height: 75vh;
+    
+        overflow: hidden;
+    }
+
+    #playerSearchResultSection #title {
+        width: 100%;
+        height: 25px;
+
+        position: relative;
+    
+        text-align: center;
+        
+        font-family: "GongGothicMedium";
+        font-size: 20px;
+    }
+    
+    #playerSearchResultSection #resultDiv {
+        width: 100%;   
+        height: 70vh;
+    
+        text-align: center;
+    }
+
+    #playerSearchResultSection #resultDiv #resultData {
+        height: 63vh;
+
+        overflow: auto;
+    }
+
+    #playerSearchResultSection #resultDiv #resultHeader table {
+        margin-left: 25vw;
+        border-spacing: 0;
+        text-align: center;
+        width: 50vw;
+    }
+
+    #playerSearchResultSection #resultDiv #resultData table {
+        margin-left: 25vw;
+        border-spacing: 0;
+        text-align: center;
+        width: 50vw;
+    }
+
+    #playerSearchResultSection #resultDiv table td {
+        height: 30px;
+    }
+
+    #playerSearchResultSection #resultDiv #resultData table{
+        border-left: 0.5px solid;
+        border-right: 0.5px solid;
+        border-bottom: 0.5px solid;
+    }
+
+    #playerSearchResultSection #resultDiv #resultData table tr:hover {
+        background-color: rgba(0,0,0,0.2); 
+    }
+
+    #playerSearchResultSection #resultDiv #resultHeader {
+        width: 100%;
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0 auto;
+    }
+
+    #playerSearchResultSection #resultDiv #resultHeader table {
+        border: 0.5px solid;
+    }
+
+    footer {
+        width: 100vw;
+        height: 5vh;
+
+        text-align: center;
+        font-size: 10px;
+    }
+}
